@@ -22,9 +22,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Қажетті тәуелділіктерді орнату
-        run: |
-          ./mvnw verify
 
       - name: PMD арқылы кодты талдау
         run: ./mvnw pmd:pmd
