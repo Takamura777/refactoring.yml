@@ -1,0 +1,49 @@
+name: Java Code Refactoring
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Репозиторийді клондау
+        uses: actions/checkout@v3
+
+      - name: Java орнату
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Қажетті тәуелділіктерді орнату
+        run: |
+          ./mvnw verify
+
+      - name: PMD арқылы кодты талдау
+        run: ./mvnw pmd:pmd
+
+      - name: Spotless арқылы кодты форматтау
+        run: ./mvnw spotless:apply
+
+      - name: Өзгерістерді commit жасау және push ету
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git add .
+          git commit -m "Автоматты рефакторинг: PMD және Spotless қолданылды" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
