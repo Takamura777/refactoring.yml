@@ -1,0 +1,14 @@
+steps:
+  - name: Репозиторийді жүктеу
+    uses: actions/checkout@v3
+
+  - name: Java және Maven орнату
+    uses: actions/setup-java@v3
+    with:
+      distribution: 'temurin'
+      java-version: '17'
+      cache: maven
+
+  - name: Maven орындау
+    run: mvn verify
+
